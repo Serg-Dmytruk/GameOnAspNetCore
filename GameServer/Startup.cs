@@ -33,7 +33,7 @@ namespace GameServer
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
-            //{
+            {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GameServer", Version = "v1" });
             });
         }
