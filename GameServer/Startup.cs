@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using GameServer.Common.ServiceExtensions;
+using GameServer.Hubs;
 
 namespace GameServer
 {
@@ -22,6 +23,7 @@ namespace GameServer
         public void ConfigureServices(IServiceCollection services)
         {
             //db
+            services.AddSignalR();
             services.AddDbContext<Data.Context.AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddServices();
             services.AddDataServices();

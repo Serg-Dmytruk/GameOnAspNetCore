@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net.Http;
-using GameClient.Common.Services.ApiServices;
+using GameClient.Common.Services.HubServices;
 
 namespace GameClient
 {

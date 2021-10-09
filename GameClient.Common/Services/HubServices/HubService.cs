@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace GameClient.Common.Services.HubServices
 {
-    class HubService
+    public class HubService
     {
         private HubConnection connection;
 
