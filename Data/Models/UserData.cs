@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Models
 {
+    [Table("UserData")]
     public class UserData
     {
         public int Id { get; set; }
@@ -14,5 +11,4 @@ namespace Data.Models
         public string UserName { get; set; }
         public UserData UserInfo {get; set;}
     }
-    
 }
