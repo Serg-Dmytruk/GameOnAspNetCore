@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
 using GameClient.Common.Services.ApiServices;
+using GameClient.Common.Services.HubServices;
 
 namespace GameClient
 {
@@ -28,6 +29,7 @@ namespace GameClient
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<HttpClient>();
+            services.AddScoped<HubService>();
             services.AddScoped<IApiService, ApiService>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
