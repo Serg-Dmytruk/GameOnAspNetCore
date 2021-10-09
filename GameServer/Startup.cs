@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameServer
 {
@@ -26,10 +28,12 @@ namespace GameServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //db
+          //  services.AddDbContext<Data.Context.AppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
-            {
+            //{
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GameServer", Version = "v1" });
             });
         }
