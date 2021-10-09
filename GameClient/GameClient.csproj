@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\css\DomStyle.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\domstyle.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameClient.Common\GameClient.Common.csproj" />
+    <ProjectReference Include="..\SharedModels\Game.Common.csproj" />
+  </ItemGroup>
+
+</Project>
