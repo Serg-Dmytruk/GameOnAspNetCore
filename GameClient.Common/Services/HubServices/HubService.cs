@@ -18,15 +18,10 @@ namespace GameClient.Common.Services.HubServices
                 .WithUrl("http://localhost:5000/gamehub")
                 .Build();
 
-            connection.On<string>("TestConnect", mess => throw new Exception());
+            connection.On<string>("TestConnect", mess => Debug.WriteLine(mess));
 
             connection.StartAsync();
             Debug.WriteLine(connection.State);
-        }
-
-        public async Task Start()
-        {
-           
         }
 
         public async Task TestConnect()

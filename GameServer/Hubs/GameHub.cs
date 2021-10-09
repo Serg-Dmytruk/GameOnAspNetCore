@@ -8,9 +8,9 @@ namespace GameServer.Hubs
 {
     public class GameHub : Hub
     {
-        public Task TestConnect()
+        public async Task TestConnect(string mess)
         {
-            return Clients.Caller.SendAsync("TestConnect", "Hello");
+            await Clients.All.SendAsync("TestConnect", mess);
         }
     }
 }
