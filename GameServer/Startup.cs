@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using GameServer.Common.ServiceExtensions;
 using GameServer.Hubs;
+using GameServer.Common.Option;
 
 namespace GameServer
 {
@@ -22,11 +23,17 @@ namespace GameServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //db
+            //options
+            services.Configure<PasswordHashOption>(Configuration.GetSection("CryptOption"));
+            //web socet
             services.AddSignalR();
+            //db
             services.AddDbContext<Data.Context.AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //servisec
             services.AddServices();
+            //data services
             services.AddDataServices();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using GameClient.Common.Shared;
-using Game.Common.ModelsDto;
-using GameClient.Common.ApiMethods;
+﻿using Game.Common.ModelsDto;
 using GameClient.Common.Services.ApiServices;
+using GameClient.Common.Shared;
+using Microsoft.AspNetCore.Components;
+using System.Threading.Tasks;
 
 namespace GameClient.Common.Pages
 {
@@ -17,11 +12,37 @@ namespace GameClient.Common.Pages
     public partial class SignIn
     {
         [Inject] private IApiService _apiService { get; set; }
+        [Inject] private NavigationManager _uriHelper { get; set; }
+        private bool waitingResponse { get; set; }
+        private bool showErrorMess { get; set; } = false;
         public LoginModelDto LoginData { get; set; } = new();
-
+        private LoginResponseDto _loginRequest {get; set;} = new();
         public async Task SigninRequest()
         {
-            var result = await _apiService.ExecuteRequest(() => _apiService.ApiMethods.Login(LoginData));
+            
+            waitingResponse = true;
+            StateHasChanged();
+            _loginRequest = (await _apiService.ExecuteRequest(() => _apiService.ApiMethods.Login(LoginData))).Data;
+            waitingResponse = false;
+
+            if (!_loginRequest.UserFind)
+                RedirectToRegistration();
+
+            if(!_loginRequest.UserCanIn)
+                showErrorMess = true;
+
+            if (_loginRequest.UserFind && _loginRequest.UserCanIn)
+                RedirectToHub();
+        }
+
+        private void RedirectToRegistration()
+        {
+            _uriHelper.NavigateTo("/registration");
+        }
+
+        private void RedirectToHub()
+        {
+            _uriHelper.NavigateTo("/hub");
         }
     }
 }

@@ -6,4 +6,20 @@
     margin-left: -50px;
     width: 100px;
     height: 100px;
+    align-items: center;
+}
+.centerOnParrentHorizontal {
+    margin-top: 10px;
+    margin-left: 70%;
+    align-self: center;
+}
+
+.hCenter {
+    position: absolute;
+    align-self: center;
+   
+}
+
+.error {
+    color: orangered;
 }

@@ -23,5 +23,17 @@ namespace GameServer.Controllers
             return await _signinService.IsUserExist(request);
         }
 
+        [HttpPost("login")]
+        [SwaggerResponse(200, Type = typeof(bool))]
+        public async Task<LoginResponseDto> Login([FromBody] LoginModelDto request)
+        {
+            return await _signinService.Login(request);
+        }
+
+        [HttpPost("registration")]
+        public async Task Registration([FromBody] LoginModelDto request)
+        {
+             await _signinService.AddUser(request);
+        }
     }
 }
