@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,15 +15,23 @@ namespace GameClient.Common.Services.HubServices
         public HubService()
         {
             connection = new HubConnectionBuilder()
-                .WithUrl("http://localhost:60667/gamehub")
+                .WithUrl("http://localhost:5000/gamehub")
                 .Build();
-            connection.StartAsync();
 
-            connection.On<string>("TestConnect", mess => Console.WriteLine(mess));
+            connection.On<string>("TestConnect", mess => throw new Exception());
+
+            connection.StartAsync();
+            Debug.WriteLine(connection.State);
+        }
+
+        public async Task Start()
+        {
+           
         }
 
         public async Task TestConnect()
         {
+            Debug.WriteLine(connection.State);
             await connection.SendAsync("TestConnect", "hello");
         }
     }

@@ -18,9 +18,10 @@ namespace GameClient.Common.Pages
     public partial class GameHub
     {
         [Inject] HubService _hub { get; set; }
+        
         public async Task TestConnect()
         {
-             await _hub.TestConnect();
+            await _hub.TestConnect();
         }
     }
 }
