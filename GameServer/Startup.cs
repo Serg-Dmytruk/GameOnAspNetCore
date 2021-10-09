@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
+using GameServer.Hubs;
 
 namespace GameServer
 {
@@ -29,7 +30,8 @@ namespace GameServer
         public void ConfigureServices(IServiceCollection services)
         {
             //db
-          //  services.AddDbContext<Data.Context.AppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //  services.AddDbContext<Data.Context.AppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddSignalR();//???????? Core
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -57,6 +59,7 @@ namespace GameServer
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<GameHub>("/gamehub");
             });
         }
     }

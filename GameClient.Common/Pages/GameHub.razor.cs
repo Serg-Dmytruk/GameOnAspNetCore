@@ -8,6 +8,8 @@ using GameClient.Common.Shared;
 using Game.Common.ModelsDto;
 using GameClient.Common.ApiMethods;
 using GameClient.Common.Services.ApiServices;
+using GameClient.Common.Services;
+using GameClient.Common.Services.HubServices;
 
 namespace GameClient.Common.Pages
 {
@@ -15,5 +17,10 @@ namespace GameClient.Common.Pages
     [Layout(typeof(EmptyLayout))]
     public partial class GameHub
     {
+        [Inject] HubService _hub { get; set; }
+        public async Task TestConnect()
+        {
+             await _hub.TestConnect();
+        }
     }
 }
