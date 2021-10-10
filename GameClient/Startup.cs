@@ -1,11 +1,12 @@
+using Blazored.SessionStorage;
 using GameClient.Common.Services.ApiServices;
+using GameClient.Common.Services.HubServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net.Http;
-using GameClient.Common.Services.HubServices;
 
 namespace GameClient
 {
@@ -27,6 +28,7 @@ namespace GameClient
             services.AddScoped<IApiService, ApiService>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddBlazoredSessionStorage();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
