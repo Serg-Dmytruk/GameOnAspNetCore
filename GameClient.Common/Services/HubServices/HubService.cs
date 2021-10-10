@@ -23,18 +23,19 @@ namespace GameClient.Common.Services.HubServices
                 .Build();
 
             connection.On<string>("TestConnect", message => Message = $"state: {connection.State}, message: {message}");
-            connection.On<List<string>>("RefreshGame", list => {
-                Games = list;
-                if (GameId != null)
-                    Games.Remove(GameId);
-                });
+            connection.On<List<string>>("RefreshGame", list => Games = list);
 
-            connection.StartAsync();
+            connection.StartAsync();            
         }
 
         public async Task TestConnect()
         {
             await connection.SendAsync("TestConnect", "Hello");
+        }
+
+        public async Task Connect()
+        {
+            await connection.SendAsync("Connect", "UserId");
         }
 
         public async Task CreateGame()
@@ -45,6 +46,11 @@ namespace GameClient.Common.Services.HubServices
         public async Task JoinGame(string gameId)
         {
             await connection.SendAsync("JoinGame", gameId);
+        }
+
+        public async Task RefreshGame()
+        {
+            await connection.SendAsync("CallerRefreshGame");
         }
     }
 }

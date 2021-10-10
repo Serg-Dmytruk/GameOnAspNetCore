@@ -11,6 +11,7 @@ using GameClient.Common.Services.ApiServices;
 using GameClient.Common.Services;
 using GameClient.Common.Services.HubServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace GameClient.Common.Pages
 {
@@ -23,6 +24,11 @@ namespace GameClient.Common.Pages
         public string Message => _hub.Message;
         public List<string> Games => _hub.Games;
         public string GameId => _hub.GameId;
+
+        protected override async Task OnInitializedAsync()
+        {
+            await _hub.Connect();
+        }
 
         public async Task TestConnect()
         {
@@ -37,6 +43,12 @@ namespace GameClient.Common.Pages
         public async Task JoinGame(string gameId)
         {
             await _hub.JoinGame(gameId);
+        }
+
+        public async Task Refresh()
+        {
+            await _hub.RefreshGame();
+            StateHasChanged();
         }
     }
 }

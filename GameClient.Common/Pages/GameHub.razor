@@ -8,7 +8,13 @@
 <button @onclick="CreateGame">Create Game</button><br>
 }
 
+<button @onclick="Refresh">Refresh</button><br>
+
 @foreach(string gameId in Games)
 { 
     <button @onclick="()=>JoinGame(gameId)">Join @gameId</button><br>
 }
+
+@GameId<br>
+@Games.Count
+
