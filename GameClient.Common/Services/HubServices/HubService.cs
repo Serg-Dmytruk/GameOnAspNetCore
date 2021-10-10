@@ -11,23 +11,40 @@ namespace GameClient.Common.Services.HubServices
     public class HubService
     {
         private HubConnection connection;
-
+        public string Message { get; private set; }
+        public List<string> Games { get; private set; }
+        public string GameId { get; private set; }
         public HubService()
         {
+            Games = new List<string>();
+
             connection = new HubConnectionBuilder()
                 .WithUrl("http://localhost:5000/gamehub")
                 .Build();
 
-            connection.On<string>("TestConnect", mess => Debug.WriteLine(mess));
+            connection.On<string>("TestConnect", message => Message = $"state: {connection.State}, message: {message}");
+            connection.On<List<string>>("RefreshGame", list => {
+                Games = list;
+                if (GameId != null)
+                    Games.Remove(GameId);
+                });
 
             connection.StartAsync();
-            Debug.WriteLine(connection.State);
         }
 
         public async Task TestConnect()
         {
-            Debug.WriteLine(connection.State);
-            await connection.SendAsync("TestConnect", "hello");
+            await connection.SendAsync("TestConnect", "Hello");
+        }
+
+        public async Task CreateGame()
+        {
+            GameId = Guid.NewGuid().ToString();
+            await connection.SendAsync("CreateGame", GameId);
+        }
+        public async Task JoinGame(string gameId)
+        {
+            await connection.SendAsync("JoinGame", gameId);
         }
     }
 }
