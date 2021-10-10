@@ -1,3 +1,14 @@
-﻿<h3>GameHub</h3>
+﻿
+<h3>GameHub</h3>
+<h4>@Message</h4>
+<button @onclick="TestConnect">Test connect</button><br>
 
-<button @onclick="TestConnect">Test connect</button>
+@if (GameId == null)
+{
+<button @onclick="CreateGame">Create Game</button><br>
+}
+
+@foreach(string gameId in Games)
+{ 
+    <button @onclick="()=>JoinGame(gameId)">Join @gameId</button><br>
+}
