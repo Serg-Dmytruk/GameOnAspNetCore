@@ -1,11 +1,11 @@
 ﻿<h3>SIGN IN</h3>
 
 <div class="divCenter">
-    @if (!waitingResponse)
+    @if (!_waitingResponse)
     {
         <input class="myInput" type="text" @bind="LoginData.Login" placeholder="Login" />
         <input class="myInput" type="password" @bind="LoginData.Password" placeholder="Password" />
-        <span><input type="checkbox" class="myInput" @bind="_rememberMe" /> Save me</span>
+        <span><input type="checkbox" style="cursor: pointer" class="myInput" @bind="_rememberMe" /> Save me</span>
         <button class="btn btn-outline-primary centerOnParrentHorizontal" @onclick="SigninRequest">Login</button>
     }
     else
@@ -16,7 +16,7 @@
     }
 </div>
 
-@if (showErrorMess)
+@if (_showErrorMess)
 {
     <p class="error">Incorrect login or password</p>
 }

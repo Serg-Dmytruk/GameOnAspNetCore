@@ -32,5 +32,21 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
+    <script>
+        window.blazorExtensions = {
+
+            WriteCookie: function (login, password) {
+                document.cookie = `login=${login};expires=31 Dec 9999 23:59:59 GMT`;
+                document.cookie = `password=${password};expires=31 Dec 9999 23:59:59 GMT`;
+            },
+
+            GetCookie: function (name) {
+                let matches = document.cookie.match(new RegExp(
+                    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+                ));
+                return matches ? decodeURIComponent(matches[1]) : undefined;
+            }
+        }
+    </script>
 </body>
 </html>
