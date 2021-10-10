@@ -32,3 +32,8 @@
     margin-top:20px;
     margin-right :30px;
 }
+
+.myInput {
+    border: 1px solid black;
+    border-radius: 5px;
+}

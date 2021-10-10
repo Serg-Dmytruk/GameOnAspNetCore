@@ -18,6 +18,7 @@ namespace GameClient.Common.Pages
         private bool waitingResponse { get; set; }
         private bool showErrorMess { get; set; } = false;
         public LoginModelDto LoginData { get; set; } = new();
+        private bool _rememberMe { get; set; } = false;
         private LoginResponseDto _loginRequest { get; set; } = new();
         public async Task SigninRequest()
         {
