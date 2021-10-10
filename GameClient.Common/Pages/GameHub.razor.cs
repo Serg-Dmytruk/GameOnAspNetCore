@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace GameClient.Common.Pages
 {
     [Microsoft.AspNetCore.Components.Route("hub")]
-    [Layout(typeof(EmptyLayout))]
     public partial class GameHub
     {
         [Inject] HubService _hub { get; set; }

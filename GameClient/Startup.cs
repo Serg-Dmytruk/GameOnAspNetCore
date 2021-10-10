@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net.Http;
 using GameClient.Common.Services.HubServices;
+using Blazored.SessionStorage;
 
 namespace GameClient
 {
@@ -25,6 +26,7 @@ namespace GameClient
             services.AddScoped<HttpClient>();
             services.AddScoped<HubService>();
             services.AddScoped<IApiService, ApiService>();
+            services.AddBlazoredSessionStorage();
             services.AddRazorPages();
             services.AddServerSideBlazor();
         }
