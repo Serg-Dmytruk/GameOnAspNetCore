@@ -37,6 +37,6 @@ else
         }
         <hr />
         <textarea class="input-lg" placeholder="Enter message" @bind="@_newMessage"></textarea>
-        <button class="btn btn-default" @onclick="@(() => SendAsync(_newMessage))">Send</button>
+        <button class="btn btn-primary" @onclick="@(() => SendAsync(_newMessage))">Send</button>
     </div>
 }

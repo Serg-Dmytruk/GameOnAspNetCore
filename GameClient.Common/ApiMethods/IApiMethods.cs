@@ -5,7 +5,7 @@ using System.Net.Http;
 
 namespace GameClient.Common.ApiMethods
 {
-    public interface  IApiMethods
+    public interface IApiMethods
     {
         [Post("/signin/check")]
         Task<ApiResponse<LoginResponseDto>> IsUserExist(LoginModelDto loginData);
@@ -15,5 +15,8 @@ namespace GameClient.Common.ApiMethods
 
         [Post("/signin/registration")]
         Task<ApiResponse<HttpResponseMessage>> Registration(LoginModelDto loginData);
+
+        [Get("/statistic/{login}")]
+        Task<ApiResponse<StatisticDto>> GetStatistic(string login);
     }
 }
