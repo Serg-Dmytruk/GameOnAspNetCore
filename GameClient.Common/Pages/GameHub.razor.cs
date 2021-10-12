@@ -10,11 +10,11 @@ using GameClient.Common.ApiMethods;
 using GameClient.Common.Services.ApiServices;
 using GameClient.Common.Services;
 using GameClient.Common.Services.HubServices;
-using Microsoft.AspNetCore.Mvc;
+
 
 namespace GameClient.Common.Pages
 {
-    [Microsoft.AspNetCore.Components.Route("hub")]
+    [Route("hub")]
     public partial class GameHub
     {
         [Inject] HubService _hub { get; set; }
