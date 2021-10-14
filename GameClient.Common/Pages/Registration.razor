@@ -1,17 +1,18 @@
-﻿<h3>REGISTRATION</h3>
+﻿<h3 class="TitleText">REGISTRATION</h3>
 
 <div class="divCenter">
     @if (!waitingResponse)
     {
-        <input type="text" @bind="LoginData.Login" placeholder="Login" />
-        <input type="password" @bind="LoginData.Password" placeholder="Password" />
-        <input type="password" @bind="LoginData.PasswordCopy" placeholder="Repeat password" />
-        <input type="text" @bind="LoginData.UserName" placeholder="User name" />
-        <button class="centerOnParrentHorizontal" @onclick="RegisterUser">Login</button>
+        <input class="myInput" type="text" @bind="LoginData.Login" placeholder="Login" />
+        <input class="myInput" type="password" @bind="LoginData.Password" placeholder="Password" />
+        <input class="myInput" type="password" @bind="LoginData.PasswordCopy" placeholder="Repeat password" />
+        <input class="myInput" type="text" @bind="LoginData.UserName" placeholder="User name" />
+        <br/>
+        <button class="btn btn-outline-primary " @onclick="RegisterUser">Registration</button>
     }
     else
     {
-        <div class="spinner-border centerOnParrentHorizontal" role="status">
+        <div class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
         </div>
     }

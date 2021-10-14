@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net.Http;
 using GameClient.Common.Services.HubServices;
+using Blazored.SessionStorage;
+using GameClient.Common.Options;
 
 namespace GameClient
 {
@@ -22,9 +24,11 @@ namespace GameClient
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ChatOptions>(Configuration.GetSection("ChatOptions"));
             services.AddScoped<HttpClient>();
             services.AddScoped<HubService>();
             services.AddScoped<IApiService, ApiService>();
+            services.AddBlazoredSessionStorage();
             services.AddRazorPages();
             services.AddServerSideBlazor();
         }

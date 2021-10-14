@@ -1,0 +1,29 @@
+﻿@using Game.Common.ModelsDto;
+<h3 class="TitleText">CHECKERS</h3>
+<div class="divCenter1">
+    @for (int i = 0; i < 8; i++)
+    {
+        int tmpI = i;
+        <div class="row">
+            @for (int j = 0; j < 8; j++)
+            {
+                int tmpJ = j;
+                var checker = _blackCheckers.FirstOrDefault(x => x.Column == j && x.Row == i);
+
+                if (checker == null)
+                    checker = _whiteCheckers.FirstOrDefault(x => x.Column == j && x.Row == i);
+
+                _canMove = _rowPossible.Contains(i) && _colomnsPossible.Contains(j);
+
+                <div @onclick="() => MoveChecker(tmpI, tmpJ)" class="cell @(_canMove ? "active" : "")">
+                    @if (checker != null)
+                    {
+                        <div @onclick="() => { _activeChecker = checker; EvaluateCheckerSpots(); }"
+                             class="checker @checker.Color @(checker == _activeChecker ? "active" : "")"></div>
+
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>

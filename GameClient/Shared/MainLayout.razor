@@ -1,5 +1,4 @@
 ﻿@inherits LayoutComponentBase
-
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -7,7 +6,7 @@
 
     <div class="main">
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <p class="textInLayout" target="_blank">@_user?.Login</p> <button class="btn btn-outline-danger" @onclick="Logout">Logout</button>
         </div>
 
         <div class="content px-4">

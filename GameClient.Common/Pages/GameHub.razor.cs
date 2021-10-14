@@ -13,10 +13,10 @@ using GameClient.Common.Services.HubServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
+
 namespace GameClient.Common.Pages
 {
-    [Microsoft.AspNetCore.Components.Route("hub")]
-    [Layout(typeof(EmptyLayout))]
+    [Route("hub")]
     public partial class GameHub
     {
         [Inject] HubService _hub { get; set; }
