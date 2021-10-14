@@ -5,16 +5,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GameServer.Common.Services.GameServices;
 
 namespace GameServer.Hubs
 {
     public class GameHub : Hub
     {
-        private List<string> games;
-        public GameHub()
+        private readonly GameService gameService;
+
+        public GameHub(GameService gameService)
         {
-            games = new List<string>();
+            this.gameService = gameService;
         }
+
         public async Task TestConnect(string mess)
         {
             await Clients.Caller.SendAsync("TestConnect", mess);
@@ -27,28 +30,32 @@ namespace GameServer.Hubs
 
         public async Task CreateGame(string gameId)
         {
-            games.Add(gameId);
-            Debug.WriteLine(gameId);
+            gameService.CreateGame(gameId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
+            await RefreshGame();
+        }
+
+        public async Task DeleteGame(string gameId)
+        {
+            gameService.DeleteGame(gameId);
             await RefreshGame();
         }
 
         public async Task JoinGame(string gameId)
         {
-            //games.Remove(gameId);
-            Debug.WriteLine(gameId);
+            gameService.JoinGame(gameId); 
+            await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
             await RefreshGame();
         }
 
         public async Task CallerRefreshGame()
         {
-            Debug.WriteLine($"[CallerRefreshGame] {games.Count}");
-            await Clients.Caller.SendAsync("RefreshGame", games);
+            await Clients.Caller.SendAsync("RefreshGame", gameService.Games);
         }
 
         public async Task RefreshGame()
         {
-            Debug.WriteLine($"[RefreshGame] {games.Count}");
-            await Clients.Others.SendAsync("RefreshGame", games);
+            await Clients.Others.SendAsync("RefreshGame", gameService.Games);
         }
     }
 }

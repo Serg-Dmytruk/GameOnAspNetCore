@@ -1,20 +1,30 @@
 ﻿
 <h3 class="TitleText">GameHub</h3>
 <h4>@Message</h4>
-<button @onclick="TestConnect">Test connect</button><br>
+<button @onclick="TestConnect">Test connect</button>
+<br>
 
 @if (GameId == null)
 {
-<button @onclick="CreateGame">Create Game</button><br>
+    <button @onclick="CreateGame">Create Game</button>
+    <br>
+}
+else
+{
+    <button @onclick="DeleteGame">Delete Game</button>
+    <br>
 }
 
-<button @onclick="Refresh">Refresh</button><br>
+<button @onclick="RefreshGame">Refresh</button>
+<br>
 
-@foreach(string gameId in Games)
-{ 
-    <button @onclick="()=>JoinGame(gameId)">Join @gameId</button><br>
+@foreach (string gameId in Games)
+{
+    <button @onclick="()=>JoinGame(gameId)">Join @gameId</button>
+    <br>
 }
 
-@GameId<br>
+@GameId
+<br>
 @Games.Count
 
