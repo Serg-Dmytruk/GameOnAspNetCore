@@ -43,8 +43,9 @@ namespace GameServer.Hubs
 
         public async Task JoinGame(string gameId)
         {
-            gameService.JoinGame(gameId); 
+            gameService.StartGame(gameId); 
             await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
+            await Clients.Group(gameId).SendAsync("StartGame", true);
             await RefreshGame();
         }
 

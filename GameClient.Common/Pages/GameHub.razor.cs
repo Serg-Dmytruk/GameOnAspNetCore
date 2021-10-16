@@ -11,13 +11,13 @@ using GameClient.Common.Shared;
 namespace GameClient.Common.Pages
 {
     [Route("hub")]
-    [Layout(typeof(EmptyLayout))]
     public partial class GameHub
     {
         [Inject] HubService _hub { get; set; }
         public string Message => _hub.Message;
         public List<string> Games => _hub.Games;
         public string GameId => _hub.GameId;
+        public bool IsRun => _hub.IsRun;
 
         protected override async Task OnInitializedAsync()
         {

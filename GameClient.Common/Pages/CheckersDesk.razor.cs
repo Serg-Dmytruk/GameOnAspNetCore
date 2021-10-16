@@ -1,4 +1,5 @@
 ﻿using Game.Common.ModelsDto;
+using GameClient.Common.Services.HubServices;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace GameClient.Common.Pages
     [Route("desk")]
     public partial class CheckersDesk
     {
+        public HubService Hub { get; set; }
         private List<CheckerDto> _blackCheckers { get; set; } = new();
         private List<CheckerDto> _whiteCheckers { get; set; } = new();
         private List<(int row, int column)> _cellsPossible { get; set; } = new();

@@ -15,13 +15,15 @@ namespace GameClient.Common.Services.HubServices
         public string Message { get; private set; }
         public List<string> Games { get; private set; }
         public string GameId { get; private set; }
+        public bool IsRun { get; private set; }
         public HubService()
         {
             Games = new List<string>();
 
             connection = new HubConnectionBuilder()
                 .WithUrl("http://localhost:5000/gamehub")
-                .Build();                       
+                .Build();
+            IsRun = false;
         }
 
         public void Bind(GameHub gameHub)
@@ -37,7 +39,11 @@ namespace GameClient.Common.Services.HubServices
                     Games = list;
                     gameHub.Refresh();
                 });
-
+            connection.On<bool>("StartGame", state =>
+                {
+                    IsRun = state;
+                    gameHub.Refresh();
+                });
             connection.StartAsync();
         }
 
@@ -65,6 +71,7 @@ namespace GameClient.Common.Services.HubServices
         public async Task JoinGame(string gameId)
         {
             await connection.SendAsync("JoinGame", gameId);
+            GameId = gameId;
         }
 
         public async Task RefreshGame()
