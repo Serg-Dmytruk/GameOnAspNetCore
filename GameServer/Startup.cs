@@ -62,6 +62,7 @@ namespace GameServer
                 endpoints.MapControllers();
                 endpoints.MapHub<GameHub>("/gamehub");
                 endpoints.MapHub<ChatHub>(ChatHub.HubUrl);
+                endpoints.MapHub<CheckerHub>(CheckerHub.HubUrl);
             });
         }
     }

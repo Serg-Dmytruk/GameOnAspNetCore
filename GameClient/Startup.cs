@@ -25,8 +25,10 @@ namespace GameClient
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ChatOptions>(Configuration.GetSection("ChatOptions"));
+            services.Configure<CheckersHubOption>(Configuration.GetSection("CheckersHubOption"));
             services.AddScoped<HttpClient>();
             services.AddScoped<HubService>();
+            services.AddScoped<CheckerHubService>();
             services.AddScoped<IApiService, ApiService>();
             services.AddBlazoredSessionStorage();
             services.AddRazorPages();
