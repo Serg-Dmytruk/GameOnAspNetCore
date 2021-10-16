@@ -1,5 +1,6 @@
 ﻿using Game.Common.ModelsDto;
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -107,6 +108,22 @@ namespace GameClient.Common.Pages
             _canMove = _cellsPossible.Contains((row, column));
             if (!_canMove)
                 return;
+
+            if (Math.Abs(_activeChecker.Column - column) == 2)
+            {
+                int jumpetColumn = (_activeChecker.Column + column) / 2;
+                int jumpetRow = (_activeChecker.Row + row) / 2;
+
+                var blackChecker = _blackCheckers.FirstOrDefault(x => x.Row == jumpetRow && x.Column == jumpetColumn);
+                if (blackChecker != null)
+                    _blackCheckers.Remove(blackChecker);
+
+                var whiteChecker = _whiteCheckers.FirstOrDefault(x => x.Row == jumpetRow && x.Column == jumpetColumn);
+                if (whiteChecker != null)
+                    _whiteCheckers.Remove(whiteChecker);
+
+
+            }
 
             _activeChecker.Column = column;
             _activeChecker.Row = row;
