@@ -13,14 +13,14 @@
                 if (checker == null)
                     checker = _whiteCheckers.FirstOrDefault(x => x.Column == j && x.Row == i);
 
-                _canMove = _rowPossible.Contains(i) && _colomnsPossible.Contains(j);
+                _canMove = _cellsPossible.Contains((i, j));
 
                 <div @onclick="() => MoveChecker(tmpI, tmpJ)" class="cell @(_canMove ? "active" : "")">
                     @if (checker != null)
                     {
                         <div @onclick="() => { _activeChecker = checker; EvaluateCheckerSpots(); }"
                              class="checker @checker.Color @(checker == _activeChecker ? "active" : "")"></div>
-
+                             <span>@(checker.Direction == CheckerDirection.Both? "K": "")</span>
                     }
                 </div>
             }
