@@ -94,19 +94,8 @@ namespace GameClient.Common.Pages
             {
                 if((_whiteTurn && blackChecker != null) || (!_whiteTurn && whiteChecker != null))
                 {
-                    int columnDifference = _activeChecker.Column - column;
-
-                    //if (columnDifference < 0)
-                    //    columnDifference--;
-                    //else
-                    //    columnDifference++;
-
-                    int rowDifference = _activeChecker.Row - row;
-
-                    //if (rowDifference < 0)
-                    //    rowDifference--;
-                    //else
-                    //    rowDifference++;
+                    int columnDifference = column - _activeChecker.Column ;
+                    int rowDifference = row - _activeChecker.Row;
 
                     EvaluateSpot(row + rowDifference, column + columnDifference, false);
                 }
