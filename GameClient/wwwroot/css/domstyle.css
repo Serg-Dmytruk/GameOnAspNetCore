@@ -217,12 +217,12 @@ textarea {
 }
     .checker.white {
         background: #fff;
+        color: red;
     }
 
     .checker span {
         text-align: center;
         margin-top: 10px;
-        display: block;
     }
 
 .checker.active {

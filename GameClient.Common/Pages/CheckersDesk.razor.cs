@@ -14,6 +14,8 @@ namespace GameClient.Common.Pages
         private CheckerDto _activeChecker { get; set; }
         private bool _canMove { get; set; } = false;
 
+        private bool _whiteTurn { get; set; } = true;
+
         protected override void OnInitialized()
         {
             SetBlackChackers();
@@ -79,13 +81,35 @@ namespace GameClient.Common.Pages
             }
         }
 
-        private void EvaluateSpot(int row, int column)
+        private void EvaluateSpot(int row, int column, bool firstTime = true)
         {
             var blackChecker = _blackCheckers.FirstOrDefault(x => x.Row == row && x.Column == column);
             var whiteChecker = _whiteCheckers.FirstOrDefault(x => x.Row == row && x.Column == column);
+
             if(blackChecker == null && whiteChecker == null)
             {
                 _cellsPossible.Add((row, column));
+            }
+            else if(firstTime)
+            {
+                if((_whiteTurn && blackChecker != null) || (!_whiteTurn && whiteChecker != null))
+                {
+                    int columnDifference = _activeChecker.Column - column;
+
+                    //if (columnDifference < 0)
+                    //    columnDifference--;
+                    //else
+                    //    columnDifference++;
+
+                    int rowDifference = _activeChecker.Row - row;
+
+                    //if (rowDifference < 0)
+                    //    rowDifference--;
+                    //else
+                    //    rowDifference++;
+
+                    EvaluateSpot(row + rowDifference, column + columnDifference, false);
+                }
             }
         }
 
@@ -105,6 +129,19 @@ namespace GameClient.Common.Pages
                 _activeChecker.Direction = CheckerDirection.Both;
 
             _activeChecker = null;
+            _whiteTurn = !_whiteTurn;
+            EvaluateCheckerSpots();
+        }
+
+        private void CheckerClick(CheckerDto checker)
+        {
+            if (_whiteTurn && checker.Color == "black")
+                return;
+
+            if (!_whiteTurn && checker.Color == "white")
+                return;
+
+            _activeChecker = checker;
             EvaluateCheckerSpots();
         }
 

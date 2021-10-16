@@ -18,9 +18,11 @@
                 <div @onclick="() => MoveChecker(tmpI, tmpJ)" class="cell @(_canMove ? "active" : "")">
                     @if (checker != null)
                     {
-                        <div @onclick="() => { _activeChecker = checker; EvaluateCheckerSpots(); }"
-                             class="checker @checker.Color @(checker == _activeChecker ? "active" : "")"></div>
-                             <span>@(checker.Direction == CheckerDirection.Both? "K": "")</span>
+                        <div @onclick="() =>CheckerClick(checker)"
+                             class="checker @checker.Color @(checker == _activeChecker ? "active" : "")">
+                            <span>@(checker.Direction == CheckerDirection.Both? "K": "")</span>
+                        </div>
+
                     }
                 </div>
             }
