@@ -26,6 +26,7 @@ namespace GameClient.Common.Pages
         {
             if (firstRender)
             {
+                StartSession();
                 LoginData.Login = await _jSRuntime.InvokeAsync<string>("blazorExtensions.GetCookie", "login");
                 LoginData.Password = await _jSRuntime.InvokeAsync<string>("blazorExtensions.GetCookie", "password");
                 StateHasChanged();

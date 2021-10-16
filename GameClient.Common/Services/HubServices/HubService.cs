@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameClient.Common.Pages;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace GameClient.Common.Services.HubServices
@@ -20,13 +21,21 @@ namespace GameClient.Common.Services.HubServices
 
             connection = new HubConnectionBuilder()
                 .WithUrl("http://localhost:5000/gamehub")
-                .Build();
+                .Build();                       
+        }
 
-            connection.On<string>("TestConnect", message => Message = $"state: {connection.State}, message: {message}");
-            connection.On<List<string>>("RefreshGame", list => {
-                Games = list;
-                if (GameId != null)
-                    Games.Remove(GameId);
+        public void Bind(GameHub gameHub)
+        {
+            connection.On<string>("TestConnect", message =>
+                {
+                    Message = $"state: {connection.State}, message: {message}";
+                    gameHub.Refresh();    
+                });
+            connection.On<List<string>>("RefreshGame", list =>
+                {
+                    list.Remove(GameId);
+                    Games = list;
+                    gameHub.Refresh();
                 });
 
             connection.StartAsync();
@@ -37,14 +46,30 @@ namespace GameClient.Common.Services.HubServices
             await connection.SendAsync("TestConnect", "Hello");
         }
 
+        public async Task Connect()
+        {
+            await connection.SendAsync("Connect", "UserId");
+        }
+
         public async Task CreateGame()
         {
             GameId = Guid.NewGuid().ToString();
             await connection.SendAsync("CreateGame", GameId);
         }
+
+        public async Task DeleteGame()
+        {
+            await connection.SendAsync("DeleteGame", GameId);
+            GameId = null;
+        }
         public async Task JoinGame(string gameId)
         {
             await connection.SendAsync("JoinGame", gameId);
+        }
+
+        public async Task RefreshGame()
+        {
+            await connection.SendAsync("CallerRefreshGame");
         }
     }
 }
