@@ -21,5 +21,12 @@ namespace GameServer.Controllers
         {
             return await _statisticService.GetStatistic(login);
         }
+
+        [HttpPost("update")]
+        [SwaggerResponse(200, Type = typeof(StatisticDto))]
+        public async Task UpdateStatistic(GameResultDto gameResultDto)
+        {
+            await _statisticService.UpdateStatistic(gameResultDto);
+        }
     }
 }

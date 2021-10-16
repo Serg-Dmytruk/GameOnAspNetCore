@@ -22,5 +22,10 @@ namespace GameServer.Common.Services.StatisticServices
                 UserName = userStatistic.UserName
             };
         }
+
+        public async Task UpdateStatistic(GameResultDto gameResultDto)
+        {
+            await _gameDataService.UpdateStatistic(gameResultDto.Login, gameResultDto.IsWin);
+        }
     }
 }
