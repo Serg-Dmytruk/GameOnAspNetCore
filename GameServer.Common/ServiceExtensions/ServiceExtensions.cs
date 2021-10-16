@@ -4,6 +4,7 @@ using Data.Services.UserDataService;
 using Data.Services.GameDataService;
 using GameServer.Common.Services.StatisticServices;
 using GameServer.Common.Services.GameServices;
+using GameServer.Common.Services.TableService;
 
 namespace GameServer.Common.ServiceExtensions
 {
@@ -14,6 +15,7 @@ namespace GameServer.Common.ServiceExtensions
         {
             services.AddTransient<ISigninService, SigninService>();
             services.AddTransient<IStatisticService, StatisticService>();
+            services.AddSingleton<ITableService, TableService>();
             services.AddSingleton<GameService>();
             return services;
         }

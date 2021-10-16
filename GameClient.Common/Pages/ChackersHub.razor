@@ -1,3 +1,19 @@
-﻿<p class="TitleText">CHACHKERS HUB</p>
+﻿@if (!_inGame)
+{
+    <p class="TitleText">CHACHKERS HUB</p>
+}
 
+@if (_inGame)
+{
+    <CheckersDesk />
+}
+else
+{
+    <button @onclick="CreateGame">Create Game</button>
+    <br/>
+    foreach (var table in _tables)
+    {
+        <button @onclick="() => JoinGame(table)">Join Game @table</button>
+    }
+}
 
