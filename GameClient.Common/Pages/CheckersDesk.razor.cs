@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
-using System;
+﻿using Game.Common.ModelsDto;
+using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Game.Common.ModelsDto;
 
 namespace GameClient.Common.Pages
 {
