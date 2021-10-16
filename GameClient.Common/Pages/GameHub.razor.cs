@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using GameClient.Common.Services.HubServices;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Components;
+using GameClient.Common.Shared;
 
 namespace GameClient.Common.Pages
 {
     [Route("hub")]
+    [Layout(typeof(EmptyLayout))]
     public partial class GameHub
     {
         [Inject] HubService _hub { get; set; }
