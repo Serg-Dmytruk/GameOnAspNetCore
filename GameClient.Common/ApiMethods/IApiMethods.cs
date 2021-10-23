@@ -18,7 +18,7 @@ namespace GameClient.Common.ApiMethods
         Task<ApiResponse<HttpResponseMessage>> Registration(LoginModelDto loginData);
 
         [Post("/statistic/update")]
-        Task<ApiResponse<HttpResponseMessage>> Update(GameResultDto result);
+        Task<ApiResponse<HttpResponseMessage>> UpdateStatistic(GameResultDto result);
 
         [Get("/statistic/{login}")]
         Task<ApiResponse<StatisticDto>> GetStatistic(string login);

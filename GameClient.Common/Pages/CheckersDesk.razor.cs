@@ -1,12 +1,11 @@
-﻿using Game.Common.ModelsDto;
-using GameClient.Common.Services.HubServices;
+﻿using Blazored.SessionStorage;
+using Game.Common.ModelsDto;
+using GameClient.Common.Services.ApiServices;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.SignalR.Client;
-using Blazored.SessionStorage;
-using GameClient.Common.Services.ApiServices;
 using System.Threading.Tasks;
 
 namespace GameClient.Common.Pages
@@ -31,14 +30,19 @@ namespace GameClient.Common.Pages
         private string _endMess { get; set; }
         private int _looseCount { get; set; } = 11;
         private string _userLogin { get; set; }
+        private bool _showPrelodrt { get; set; } = true;
+
+        public GameResultDto GameRes {get; set;}
 
         protected override async Task OnInitializedAsync()
         {
+            _showPrelodrt = true;
             _userLogin = (await _sessionStorageService.GetItemAsync<LoginModelDto>("User")).Login;
             SetBlackChackers();
             SetWhiteChackers();
             HubConnection.On<string>("TableJoined", TableJoin);
             HubConnection.On<int, int, int, int>("Move", ServerMove);
+            _showPrelodrt = false;
         }
 
         private void TableJoin(string login)
@@ -59,7 +63,10 @@ namespace GameClient.Common.Pages
             StateHasChanged();
             if (_blackCheckers.Count == _looseCount || _whiteCheckers.Count == _looseCount)
             {
-                await WinCheck();
+                var res = await WinCheck();
+                await HubConnection.DisposeAsync();
+                await _apiService.ExecuteRequest(() => _apiService.ApiMethods.UpdateStatistic(res));
+                StateHasChanged();
             }
         }
 
@@ -182,7 +189,7 @@ namespace GameClient.Common.Pages
             EvaluateCheckerSpots();
         }
 
-        private async Task WinCheck()
+        private async Task<GameResultDto> WinCheck()
         {
             await HubConnection.DisposeAsync();
      
@@ -210,11 +217,8 @@ namespace GameClient.Common.Pages
                _endMess = "You Loose!";
             }
 
-            var result = new GameResultDto { Login = _userLogin, IsWin = res };
-            await _apiService.ExecuteRequest(() => _apiService.ApiMethods.Update(result));
             _gameEnd = true;
-            StateHasChanged();
-
+            return  new GameResultDto { Login = _userLogin, IsWin = res };
         }
 
         private void CheckerClick(CheckerDto checker)

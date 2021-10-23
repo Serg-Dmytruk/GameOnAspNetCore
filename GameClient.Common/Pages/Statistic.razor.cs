@@ -20,6 +20,7 @@ namespace GameClient.Common.Pages
                 _user = await _sessionStorageService.GetItemAsync<LoginModelDto>("User");
 
             _statisticDto = (await _apiService.ExecuteRequest(() => _apiService.ApiMethods.GetStatistic(_user.Login))).Data;
+            StateHasChanged();
         }
 
     }
