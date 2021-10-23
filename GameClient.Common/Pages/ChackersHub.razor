@@ -5,15 +5,19 @@
 
 @if (_inGame)
 {
-    <CheckersDesk />
+    <CheckersDesk HubConnection="_checkerHubService.HubConnection" TableId="@_tableId" IsWhitePlayer="@_isWhite"/>
 }
 else
 {
     <button @onclick="CreateGame">Create Game</button>
-    <br/>
+    <br />
+    <button @onclick="RefreshTables">Refresh Tables</button>
+    <br />
+
+    <h5>Games</h5>
     foreach (var table in _tables)
     {
-        <button @onclick="() => JoinGame(table)">Join Game @table</button>
+        <button @onclick="() => JoinGame(table)">Join Game @table</button><br/>
     }
 }
 

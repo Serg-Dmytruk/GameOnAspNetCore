@@ -3,12 +3,16 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace GameClient.Common.Pages
 {
     [Route("desk")]
     public partial class CheckersDesk
     {
+        [Parameter] public bool IsWhitePlayer { get; set; }
+        [Parameter] public HubConnection HubConnection { get; set; }
+        [Parameter] public string TableId { get; set; }
         private List<CheckerDto> _blackCheckers { get; set; } = new();
         private List<CheckerDto> _whiteCheckers { get; set; } = new();
         private List<(int row, int column)> _cellsPossible { get; set; } = new();
@@ -21,6 +25,20 @@ namespace GameClient.Common.Pages
         {
             SetBlackChackers();
             SetWhiteChackers();
+            HubConnection.On("TableJoined", () => { Console.WriteLine("Someone joined"); });
+            HubConnection.On<int, int, int, int>("Move", ServerMove);
+        }
+
+        private void ServerMove(int prevCol, int prevRow, int newCol, int newRow)
+        {
+            var checker = _blackCheckers.FirstOrDefault(c => c.Column == prevCol && c.Row == prevRow);
+            if(checker == null)
+                checker = _whiteCheckers.FirstOrDefault(c => c.Column == prevCol && c.Row == prevRow);
+            _activeChecker = checker;
+            Console.WriteLine("some");
+            EvaluateCheckerSpots();
+            MoveChecker(newRow, newCol);
+            StateHasChanged();
         }
 
         private void SetBlackChackers()
@@ -125,6 +143,8 @@ namespace GameClient.Common.Pages
 
             }
 
+            HubConnection.SendAsync("Move", TableId, _activeChecker.Column, _activeChecker.Row, column, row);
+
             _activeChecker.Column = column;
             _activeChecker.Row = row;
 
@@ -141,6 +161,12 @@ namespace GameClient.Common.Pages
 
         private void CheckerClick(CheckerDto checker)
         {
+            if (_whiteTurn != IsWhitePlayer)
+                return;
+
+            if (!_whiteTurn && IsWhitePlayer)
+                return;
+
             if (_whiteTurn && checker.Color == "black")
                 return;
 

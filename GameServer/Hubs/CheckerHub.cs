@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using GameServer.Common.Services.TableService;
+using Microsoft.AspNetCore.SignalR;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GameServer.Common.Services.TableService;
 
 namespace GameServer.Hubs
 {
@@ -29,6 +28,12 @@ namespace GameServer.Hubs
                 await Groups.AddToGroupAsync(Context.ConnectionId, tableId);
                 _tableService.AddTable(tableId, 1);
             }
+        }
+
+        public async Task Move(string tableId, int prevCol, int prevRow, int newCol, int newRow)
+        {
+             await Clients.GroupExcept(tableId, Context.ConnectionId).SendAsync("Move", prevCol, prevRow, newCol, newRow);
+           
         }
     }
 }
