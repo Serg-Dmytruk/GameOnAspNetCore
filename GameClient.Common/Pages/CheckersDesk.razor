@@ -1,5 +1,13 @@
 ﻿@using Game.Common.ModelsDto;
 <h3 class="TitleText">CHECKERS</h3>
+@if (_someononeJoined)
+{
+    <div class="alert alert-info">@_whoJoined joined</div>
+}
+@if (_gameEnd)
+{
+    <div class="alert alert-info">@_endMess</div>
+}
 <div class="divCenter1">
     @for (int i = 0; i < 8; i++)
     {

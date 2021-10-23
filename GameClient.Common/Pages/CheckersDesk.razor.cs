@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.SignalR.Client;
+using Blazored.SessionStorage;
+using GameClient.Common.Services.ApiServices;
+using System.Threading.Tasks;
 
 namespace GameClient.Common.Pages
 {
@@ -14,32 +17,47 @@ namespace GameClient.Common.Pages
         [Parameter] public bool IsWhitePlayer { get; set; }
         [Parameter] public HubConnection HubConnection { get; set; }
         [Parameter] public string TableId { get; set; }
+        [Inject] private ISessionStorageService _sessionStorageService { get; set; }
+        [Inject] private IApiService _apiService { get; set; }
         private List<CheckerDto> _blackCheckers { get; set; } = new();
         private List<CheckerDto> _whiteCheckers { get; set; } = new();
         private List<(int row, int column)> _cellsPossible { get; set; } = new();
         private CheckerDto _activeChecker { get; set; }
         private bool _canMove { get; set; } = false;
-
         private bool _whiteTurn { get; set; } = true;
-
+        private string _whoJoined { get; set; }
+        private bool _someononeJoined { get; set; } = false;
+        private bool _gameEnd { get; set; } = false;
+        private string _endMess { get; set; }
+        private int _looseCount { get; set; } = 11;
         protected override void OnInitialized()
         {
             SetBlackChackers();
             SetWhiteChackers();
-            HubConnection.On("TableJoined", () => { Console.WriteLine("Someone joined"); });
+            HubConnection.On<string>("TableJoined", TableJoin);
             HubConnection.On<int, int, int, int>("Move", ServerMove);
         }
 
-        private void ServerMove(int prevCol, int prevRow, int newCol, int newRow)
+        private void TableJoin(string login)
+        {
+            _whoJoined = login;
+            _someononeJoined = true;
+            StateHasChanged();
+        }
+
+        private async Task ServerMove(int prevCol, int prevRow, int newCol, int newRow)
         {
             var checker = _blackCheckers.FirstOrDefault(c => c.Column == prevCol && c.Row == prevRow);
-            if(checker == null)
+            if (checker == null)
                 checker = _whiteCheckers.FirstOrDefault(c => c.Column == prevCol && c.Row == prevRow);
             _activeChecker = checker;
-            Console.WriteLine("some");
             EvaluateCheckerSpots();
             MoveChecker(newRow, newCol);
             StateHasChanged();
+            if (_blackCheckers.Count == _looseCount || _whiteCheckers.Count == _looseCount)
+            {
+                await WinCheck();
+            }
         }
 
         private void SetBlackChackers()
@@ -83,7 +101,7 @@ namespace GameClient.Common.Pages
             {
                 List<int> rowsPossible = new();
 
-                if(_activeChecker.Direction == CheckerDirection.Down || _activeChecker.Direction == CheckerDirection.Both)
+                if (_activeChecker.Direction == CheckerDirection.Down || _activeChecker.Direction == CheckerDirection.Both)
                 {
                     rowsPossible.Add(_activeChecker.Row + 1);
                 }
@@ -106,15 +124,15 @@ namespace GameClient.Common.Pages
             var blackChecker = _blackCheckers.FirstOrDefault(x => x.Row == row && x.Column == column);
             var whiteChecker = _whiteCheckers.FirstOrDefault(x => x.Row == row && x.Column == column);
 
-            if(blackChecker == null && whiteChecker == null)
+            if (blackChecker == null && whiteChecker == null)
             {
                 _cellsPossible.Add((row, column));
             }
-            else if(firstTime)
+            else if (firstTime)
             {
-                if((_whiteTurn && blackChecker != null) || (!_whiteTurn && whiteChecker != null))
+                if ((_whiteTurn && blackChecker != null) || (!_whiteTurn && whiteChecker != null))
                 {
-                    int columnDifference = column - _activeChecker.Column ;
+                    int columnDifference = column - _activeChecker.Column;
                     int rowDifference = row - _activeChecker.Row;
 
                     EvaluateSpot(row + rowDifference, column + columnDifference, false);
@@ -157,7 +175,39 @@ namespace GameClient.Common.Pages
 
             _activeChecker = null;
             _whiteTurn = !_whiteTurn;
+
             EvaluateCheckerSpots();
+        }
+
+        private async Task WinCheck()
+        {
+            await HubConnection.DisposeAsync();
+            var userLogin = (await _sessionStorageService.GetItemAsync<LoginModelDto>("User")).Login;
+
+            if (IsWhitePlayer && _blackCheckers.Count == _looseCount)
+            {
+                await _apiService.ExecuteRequest(() => _apiService.ApiMethods.Update(new GameResultDto { Login = userLogin, IsWin = true }));
+                _endMess = "You Win!";
+            }
+            else if(IsWhitePlayer && _whiteCheckers.Count == _looseCount)
+            {
+                await _apiService.ExecuteRequest(() => _apiService.ApiMethods.Update(new GameResultDto { Login = userLogin, IsWin = false }));
+                _endMess = "You Loose!";
+            }
+
+            if (!IsWhitePlayer && _whiteCheckers.Count == _looseCount)
+            {
+                await _apiService.ExecuteRequest(() => _apiService.ApiMethods.Update(new GameResultDto { Login = userLogin, IsWin = true }));
+                _endMess = "You Win!";
+            }
+            else if(!IsWhitePlayer && _blackCheckers.Count == _looseCount)
+            {
+                await _apiService.ExecuteRequest(() => _apiService.ApiMethods.Update(new GameResultDto { Login = userLogin, IsWin = false }));
+                _endMess = "You Loose!";
+            }
+            _gameEnd = true;
+            StateHasChanged();
+
         }
 
         private void CheckerClick(CheckerDto checker)

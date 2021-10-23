@@ -16,12 +16,12 @@ namespace GameServer.Hubs
             _tableService = tableService;
         }
 
-        public async Task JoinTable(string tableId)
+        public async Task JoinTable(string tableId, string login)
         {
             if ((await _tableService.GetAwailableTables()).Contains(tableId))
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, tableId);
-                await Clients.GroupExcept(tableId, Context.ConnectionId).SendAsync("TableJoined");
+                await Clients.GroupExcept(tableId, Context.ConnectionId).SendAsync("TableJoined", login);
             }
             else
             {

@@ -1,4 +1,6 @@
-﻿using GameClient.Common.Services.ApiServices;
+﻿using Blazored.SessionStorage;
+using Game.Common.ModelsDto;
+using GameClient.Common.Services.ApiServices;
 using GameClient.Common.Services.HubServices;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -13,6 +15,7 @@ namespace GameClient.Common.Pages
     {
         [Inject] private CheckerHubService _checkerHubService { get; set; }
         [Inject] private IApiService _apiService { get; set; }
+        [Inject] private ISessionStorageService _sessionStorageService { get; set; }
         private bool _inGame { get; set; } = false;
         private string _tableId { get; set; }
         private List<string> _tables = new List<string>();
@@ -27,16 +30,17 @@ namespace GameClient.Common.Pages
         {
             await _checkerHubService.HubConnection.StartAsync();
             _tableId = Guid.NewGuid().ToString();
-            await _checkerHubService.HubConnection.SendAsync("JoinTable", _tableId);
+            await _checkerHubService.HubConnection.SendAsync("JoinTable", _tableId, "");
             _isWhite = true;
             _inGame = true;
         }
 
         private async Task JoinGame(string tableId)
         {
+            string login = (await _sessionStorageService.GetItemAsync<LoginModelDto>("User")).Login;
             await _checkerHubService.HubConnection.StartAsync();
             _tableId = tableId;
-            await _checkerHubService.HubConnection.SendAsync("JoinTable", tableId);
+            await _checkerHubService.HubConnection.SendAsync("JoinTable", tableId, login);
             _isWhite = false;
             _inGame = true;
             

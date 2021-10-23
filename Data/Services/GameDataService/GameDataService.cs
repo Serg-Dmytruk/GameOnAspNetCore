@@ -28,6 +28,10 @@ namespace Data.Services.GameDataService
         public async Task UpdateStatistic(string userLogin, bool isWin)
         {
             var user = await _appDbContext.UserDatas.Include(u => u.UserInfo).FirstOrDefaultAsync(x => x.Login == userLogin);
+
+            if (user == null)
+                return;
+
             var userInfo = user.UserInfo;
             userInfo.TotalGamesCount ++;
 
