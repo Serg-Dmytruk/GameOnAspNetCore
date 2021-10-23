@@ -9,11 +9,13 @@ namespace GameServer.Common.Services.GameServices
     public class GameService
     {
         private List<string> games;
+        private List<string> runingGames;
         public List<string> Games { get => games; }
-
+        public List<string> RuningGames { get => runingGames; }
         public GameService()
         {
             games = new List<string>();
+            runingGames = new List<string>();
         }
 
         public void CreateGame(string gameId)
@@ -26,9 +28,10 @@ namespace GameServer.Common.Services.GameServices
             games.Remove(gameId);
         }
 
-        public void JoinGame(string gameId)
+        public void StartGame(string gameId)
         {
             games.Remove(gameId);
+            runingGames.Add(gameId);
         }
     }
 }
