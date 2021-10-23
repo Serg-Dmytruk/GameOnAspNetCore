@@ -1,20 +1,14 @@
-﻿using GameClient.Common.Options;
-using GameClient.Common.Services.ApiServices;
+﻿using GameClient.Common.Services.ApiServices;
 using GameClient.Common.Services.HubServices;
-using GameClient.Common.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GameClient.Common.Pages
 {
     [Route("chackers-hub")]
-    [Layout(typeof(EmptyLayout))]
     public partial class ChackersHub
     {
         [Inject] private CheckerHubService _checkerHubService { get; set; }

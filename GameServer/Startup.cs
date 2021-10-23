@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using GameServer.Common.ServiceExtensions;
 using GameServer.Hubs;
 using GameServer.Common.Option;
+using Data.Context;
 
 namespace GameServer
 {
@@ -28,7 +29,7 @@ namespace GameServer
             //web socet
             services.AddSignalR();
             //db
-            services.AddDbContext<Data.Context.AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             //servisec
             services.AddServices();
             //data services

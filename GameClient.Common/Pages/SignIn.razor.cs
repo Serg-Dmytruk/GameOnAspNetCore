@@ -70,7 +70,7 @@ namespace GameClient.Common.Pages
 
         private void RedirectToHub()
         {
-            _uriHelper.NavigateTo("/hub");
+            _uriHelper.NavigateTo("/chackers-hub");
         }
     }
 }

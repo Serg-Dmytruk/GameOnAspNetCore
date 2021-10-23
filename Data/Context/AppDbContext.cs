@@ -5,7 +5,10 @@ namespace Data.Context
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
+        {
+           // Database.EnsureCreated();
+        }
 
         public DbSet<UserData> UserDatas {get; set;}
         public DbSet<GameData> GameDatas {get; set;}
