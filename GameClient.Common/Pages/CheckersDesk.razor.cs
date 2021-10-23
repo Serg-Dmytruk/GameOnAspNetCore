@@ -30,8 +30,11 @@ namespace GameClient.Common.Pages
         private bool _gameEnd { get; set; } = false;
         private string _endMess { get; set; }
         private int _looseCount { get; set; } = 11;
-        protected override void OnInitialized()
+        private string _userLogin { get; set; }
+
+        protected override async Task OnInitializedAsync()
         {
+            _userLogin = (await _sessionStorageService.GetItemAsync<LoginModelDto>("User")).Login;
             SetBlackChackers();
             SetWhiteChackers();
             HubConnection.On<string>("TableJoined", TableJoin);
@@ -182,29 +185,33 @@ namespace GameClient.Common.Pages
         private async Task WinCheck()
         {
             await HubConnection.DisposeAsync();
-            var userLogin = (await _sessionStorageService.GetItemAsync<LoginModelDto>("User")).Login;
+     
+            bool res = false;
 
             if (IsWhitePlayer && _blackCheckers.Count == _looseCount)
             {
-                await _apiService.ExecuteRequest(() => _apiService.ApiMethods.Update(new GameResultDto { Login = userLogin, IsWin = true }));
-                _endMess = "You Win!";
+                res = true;
+                 _endMess = "You Win!";
             }
             else if(IsWhitePlayer && _whiteCheckers.Count == _looseCount)
             {
-                await _apiService.ExecuteRequest(() => _apiService.ApiMethods.Update(new GameResultDto { Login = userLogin, IsWin = false }));
+                res = false;
                 _endMess = "You Loose!";
             }
 
             if (!IsWhitePlayer && _whiteCheckers.Count == _looseCount)
             {
-                await _apiService.ExecuteRequest(() => _apiService.ApiMethods.Update(new GameResultDto { Login = userLogin, IsWin = true }));
+                res = true;
                 _endMess = "You Win!";
             }
             else if(!IsWhitePlayer && _blackCheckers.Count == _looseCount)
             {
-                await _apiService.ExecuteRequest(() => _apiService.ApiMethods.Update(new GameResultDto { Login = userLogin, IsWin = false }));
-                _endMess = "You Loose!";
+                res = false;
+               _endMess = "You Loose!";
             }
+
+            var result = new GameResultDto { Login = _userLogin, IsWin = res };
+            await _apiService.ExecuteRequest(() => _apiService.ApiMethods.Update(result));
             _gameEnd = true;
             StateHasChanged();
 

@@ -23,9 +23,9 @@ namespace GameServer.Controllers
         }
 
         [HttpPost("update")]
-        public async Task UpdateStatistic(GameResultDto gameResultDto)
+        public async Task UpdateStatistic(GameResultDto result)
         {
-            await _statisticService.UpdateStatistic(gameResultDto);
+            await _statisticService.UpdateStatistic(result);
         }
     }
 }
