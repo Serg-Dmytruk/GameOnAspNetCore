@@ -63,7 +63,8 @@ namespace GameClient.Common.Pages
             StateHasChanged();
             if (_blackCheckers.Count == _looseCount || _whiteCheckers.Count == _looseCount)
             {
-                var res = await WinCheck();
+                var res =  WinCheck();
+                await HubConnection.SendAsync("ReleaseRoom", TableId);
                 await HubConnection.DisposeAsync();
                 await _apiService.ExecuteRequest(() => _apiService.ApiMethods.UpdateStatistic(res));
                 StateHasChanged();
@@ -189,10 +190,8 @@ namespace GameClient.Common.Pages
             EvaluateCheckerSpots();
         }
 
-        private async Task<GameResultDto> WinCheck()
+        private GameResultDto WinCheck()
         {
-            await HubConnection.DisposeAsync();
-     
             bool res = false;
 
             if (IsWhitePlayer && _blackCheckers.Count == _looseCount)

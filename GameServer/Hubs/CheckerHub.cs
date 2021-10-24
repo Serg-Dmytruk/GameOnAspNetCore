@@ -30,6 +30,12 @@ namespace GameServer.Hubs
             }
         }
 
+        public async Task ReleaseRoom(string tableId)
+        {
+            _tableService.DeleteTable(tableId);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, tableId);
+        }
+
         public async Task Move(string tableId, int prevCol, int prevRow, int newCol, int newRow)
         {
              await Clients.GroupExcept(tableId, Context.ConnectionId).SendAsync("Move", prevCol, prevRow, newCol, newRow);

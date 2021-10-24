@@ -16,5 +16,10 @@ namespace GameServer.Common.Services.TableService
         {
             _tables.Add(tableId, playerCount);
         }
+        public void DeleteTable(string tableId)
+        {
+            if (_tables.ContainsKey(tableId))
+                _tables.Remove(tableId);
+        }
     }
 }

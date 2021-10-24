@@ -26,9 +26,15 @@ namespace GameClient.Common.Pages
            await RefreshTables();
         }
 
+        protected async override Task OnAfterRenderAsync(bool firstRender)
+        {
+            if(firstRender)
+                await _checkerHubService.HubConnection.StartAsync();
+        }
+
         private async Task CreateGame()
         {
-            await _checkerHubService.HubConnection.StartAsync();
+            // await _checkerHubService.HubConnection.StartAsync();
             _tableId = Guid.NewGuid().ToString();
             await _checkerHubService.HubConnection.SendAsync("JoinTable", _tableId, "");
             _isWhite = true;
@@ -38,7 +44,7 @@ namespace GameClient.Common.Pages
         private async Task JoinGame(string tableId)
         {
             string login = (await _sessionStorageService.GetItemAsync<LoginModelDto>("User")).Login;
-            await _checkerHubService.HubConnection.StartAsync();
+           // await _checkerHubService.HubConnection.StartAsync();
             _tableId = tableId;
             await _checkerHubService.HubConnection.SendAsync("JoinTable", tableId, login);
             _isWhite = false;

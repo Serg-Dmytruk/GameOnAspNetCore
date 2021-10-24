@@ -7,5 +7,6 @@ namespace GameServer.Common.Services.TableService
     {
         Task<IEnumerable<string>> GetAwailableTables();
         void AddTable(string tableId, int playerCount);
+        void DeleteTable(string tableId);
     }
 }
