@@ -28,7 +28,7 @@ namespace GameClient.Common.Pages
         private bool _someononeJoined { get; set; } = false;
         private bool _gameEnd { get; set; } = false;
         private string _endMess { get; set; }
-        private int _looseCount { get; set; } = 11;
+        private int _looseCount { get; set; } = 10;
         private string _userLogin { get; set; }
         private bool _showPrelodrt { get; set; } = true;
 

@@ -14,12 +14,22 @@ namespace GameClient.Common.Pages
         private StatisticDto _statisticDto { get; set; } = new();
         private LoginModelDto _user { get; set; }
 
+        private bool _preLoader { get; set; } = true;
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if(firstRender)
+            if (firstRender)
+            {
+                _preLoader = true;
                 _user = await _sessionStorageService.GetItemAsync<LoginModelDto>("User");
+                _statisticDto = (await _apiService.ExecuteRequest(() => _apiService.ApiMethods.GetStatistic(_user.Login))).Data;
+                _preLoader = false;
+            }
+            else
+            {
+                _statisticDto = (await _apiService.ExecuteRequest(() => _apiService.ApiMethods.GetStatistic(_user.Login))).Data;
+            }
 
-            _statisticDto = (await _apiService.ExecuteRequest(() => _apiService.ApiMethods.GetStatistic(_user.Login))).Data;
+            
             StateHasChanged();
         }
 
